@@ -374,14 +374,66 @@
       </li>
     </ul>
   </div>
+  <!-- Add these scripts before your custom JS -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBixTn0bMEL3MOMicnS91RvIkB_J6UxJjU",
+      authDomain: "fridge-9939c.firebaseapp.com",
+      databaseURL: "https://fridge-9939c-default-rtdb.firebaseio.com/", // <-- ADD THIS LINE
+      projectId: "fridge-9939c",
+      storageBucket: "fridge-9939c.firebasestorage.app",
+      messagingSenderId: "467635348152",
+      appId: "1:467635348152:web:68e1f97d3c9725d1dc0a4d",
+      measurementId: "G-YD69HNPNRX"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+  </script>
+  <script>
+    // Your existing JS (changeQty, filterItems, etc.) goes here
     function changeQty(btn, delta) {
-      const valueSpan = btn.parentElement.querySelector('.qty-value');
+      const li = btn.closest('li');
+      const valueSpan = li.querySelector('.qty-value');
       let value = parseInt(valueSpan.textContent, 10);
       value += delta;
       if (value < 0) value = 0;
       valueSpan.textContent = value;
+
+      // Save to Firebase
+      const category = li.parentElement.id;
+      const item = li.querySelector('.item-name').textContent;
+      db.ref(`fridge1/${category}/${item}`).set(value);
     }
+
+    // Load all values from Firebase on page load
+    window.onload = function() {
+      const lists = [
+        'fridge-items-meat',
+        'fridge-items',
+        'fridge-items-pastry',
+        'fridge-items-fruits',
+        'fridge-items-veg'
+      ];
+      lists.forEach(category => {
+        db.ref(`fridge1/${category}`).on('value', snapshot => {
+          const data = snapshot.val();
+          if (!data) return;
+          const ul = document.getElementById(category);
+          if (!ul) return;
+          Array.from(ul.children).forEach(li => {
+            const item = li.querySelector('.item-name');
+            const valueSpan = li.querySelector('.qty-value');
+            if (item && valueSpan && data[item.textContent] !== undefined) {
+              valueSpan.textContent = data[item.textContent];
+            }
+          });
+        });
+      });
+    };
 
     function filterItems() {
       const search = document.getElementById('search').value.toLowerCase();
