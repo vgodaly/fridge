@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fridge 1 Contents</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f7fafc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 400px;
+      width: 95%;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 32px 24px;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 2em;
+      color: #2d3748;
+      text-align: center;
+    }
+    a {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: #3182ce;
+      text-decoration: none;
+      font-size: 1em;
+    }
+    .search-bar {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-size: 1em;
+      box-sizing: border-box;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .search-bar:focus {
+      border: 1.5px solid #3182ce;
+    }
+    ul[id^="fridge-items"] {
+      list-style: none;
+      padding: 0;
+    }
+    ul[id^="fridge-items"] li {
+      background: #edf2f7;
+      margin-bottom: 12px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 1.1em;
+      color: #4a5568;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.2s;
+    }
+    ul[id^="fridge-items"] li.hidden {
+      display: none;
+    }
+    .item-name {
+      flex: 1;
+    }
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      background: #3182ce;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .qty-btn:hover {
+      background: #225ea8;
+    }
+    .qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+    .category {
+      font-weight: bold;
+      color: #2d3748;
+      margin: 18px 0 8px 0;
+      font-size: 1.05em;
+      letter-spacing: 0.5px;
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 18px 4px;
+      }
+      h1 {
+        font-size: 1.3em;
+      }
+      .qty-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.3em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fridge 1 Contents</h1>
+    <a href="index.html">← Back to Fridges</a>
+    <input class="search-bar" type="text" id="search" placeholder="Search for an item..." oninput="filterItems()">
+    
+    <div class="category">Meat</div>
+    <ul id="fridge-items-meat">
+      <li>
+        <span class="item-name">Kuracie Prsia</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">2</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Bravčová Panenka</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Steak</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Mleté Hovädzie</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Losos</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Pražma</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+    </ul>
+
+    <div class="category">Dairy</div>
+    <ul id="fridge-items">
+      <li>
+        <span class="item-name">Maslo</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Parmezán</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Eidam</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">12</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Mlieko (kravské)</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Mlieko (rastlinné)</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Tvaroh</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Grécky Jogurt</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+    </ul>
+
+    <div class="category">Pastry and Pasta</div>
+    <ul id="fridge-items-pastry">
+      <li>
+        <span class="item-name">Chlieb</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">3</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Toast</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">4</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Rožok</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Špagety</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Cestoviny</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+    </ul>
+
+    <div class="category">Fruits</div>
+    <ul id="fridge-items-fruits">
+      <li>
+        <span class="item-name">Jablko</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">6</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Banán</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">3</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Jahody</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Čučoriedky</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Maliny</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Melón</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+    </ul>
+
+    <div class="category">Vegetables</div>
+    <ul id="fridge-items-veg">
+      <li>
+        <span class="item-name">Rajčiny</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">5</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Cuketa</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">2</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Uharok</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Šalát</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+      <li>
+        <span class="item-name">Mrkva</span>
+        <span class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <script>
+    function changeQty(btn, delta) {
+      const valueSpan = btn.parentElement.querySelector('.qty-value');
+      let value = parseInt(valueSpan.textContent, 10);
+      value += delta;
+      if (value < 0) value = 0;
+      valueSpan.textContent = value;
+    }
+
+    function filterItems() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const lists = [
+        document.getElementById('fridge-items-meat'),
+        document.getElementById('fridge-items'),
+        document.getElementById('fridge-items-pastry'),
+        document.getElementById('fridge-items-fruits'),
+        document.getElementById('fridge-items-veg')
+      ];
+      lists.forEach(list => {
+        Array.from(list.children).forEach(li => {
+          const name = li.querySelector('.item-name').textContent.toLowerCase();
+          if (name.includes(search)) {
+            li.classList.remove('hidden');
+          } else {
+            li.classList.add('hidden');
+          }
+        });
+      });
+    }
+  </script>
+</body>
+</html>
