@@ -399,6 +399,7 @@
       const li = btn.closest('li');
       const valueSpan = li.querySelector('.qty-value');
       let value = parseInt(valueSpan.textContent, 10);
+      if (isNaN(value)) value = 0; // Treat "-" or invalid as 0
       value += delta;
       if (value < 0) value = 0;
       valueSpan.textContent = value;
